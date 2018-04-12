@@ -25,13 +25,14 @@ random.seed(42)
 tf.set_random_seed(42)
 
 def train(epochs,batch_size,basic_needs,success_probability):
-    # the concatenation of a state and action
+    # initialize count:
     count = 0
     
-    ## define arrays to contain means and variances:
+    ## define number of evaluations:
     N = int(epochs/100)
     
-    food_vectors = np.zeros((N,24))
+    # initialize food vectors and total consumption:
+    food_policies = np.zeros((N,24))
     total_consumption = np.zeros(N)
         
     with tf.Session() as sess:
@@ -44,7 +45,6 @@ def train(epochs,batch_size,basic_needs,success_probability):
         
         ### define the optimiser:
         optimizer = tf.train.AdagradOptimizer(0.01)
-        
         train_agent = optimizer.minimize(surprisal)
         
         ### initialise the variables:
@@ -66,9 +66,9 @@ def train(epochs,batch_size,basic_needs,success_probability):
                 evaluation_feed = {F.survival : mini_batch[0].reshape(1,1)}
                 #print(np.shape(F.sess.run([F.strategy],feed_dict=evaluation_feed)[0]))
                 #break
-                food_vectors[count] = F.sess.run([F.strategy],feed_dict=evaluation_feed)[0]
-                total_consumption[count] = np.sum(food_vectors[count])
+                food_policies[count] = F.sess.run([F.strategy],feed_dict=evaluation_feed)[0]
+                total_consumption[count] = np.sum(food_policies[count])
                 count += 1
             
-    return log_loss, food_vectors, total_consumption
+    return log_loss, food_policies, total_consumption
     

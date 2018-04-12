@@ -28,13 +28,11 @@ class free_agent:
     
     def decision_network(self):
         """
-        This function provides a cheap approximation to empowerment
-        upon convergence of the training algorithm. Given that the 
-        mutual information is non-negative this function must only
-        give non-negative output. 
+        This function calculates a food policy which is optimal
+        for the agent's homeostatic conditions. 
         
-        input: state
-        output: empowerment estimate
+        input: survival policy
+        output: food policy
         """
         
         with tf.variable_scope("decision"):
@@ -59,10 +57,9 @@ class free_agent:
         
         #get probability of success:
         success_vector = tf.convert_to_tensor(np.random.choice((0.0,1.0),size=24,p=(1-self.p,self.p)))
-        #total = tf.reduce_sum(tf.multiply(tf.cast(success_vector,tf.float32),self.strategy))
         total = tf.multiply(tf.cast(success_vector,tf.float32),self.strategy)
         
-        ## setup distribution:
+        ## define normal distribution:
         dist = tf.contrib.distributions.Normal(self.basic_needs,1.0)
         
         
