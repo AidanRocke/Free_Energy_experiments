@@ -18,20 +18,11 @@ import random
 import tensorflow as tf
 import numpy as np
 
-import matplotlib.pyplot as plt
 from free_energy_agent import free_agent
 
 ## set random seed:
 random.seed(42)
 tf.set_random_seed(42)
-
-## define number of epochs:
-epochs = 1000 ### must be a perfect square
-batch_size = 50
-
-## define main parameters:
-basic_needs = 5.0
-success_probability = 1.0
 
 def train(epochs,batch_size,basic_needs,success_probability):
     # the concatenation of a state and action
@@ -40,15 +31,16 @@ def train(epochs,batch_size,basic_needs,success_probability):
     ## define arrays to contain means and variances:
     N = int(epochs/100)
     
-    hunting_priors = basic_needs*np.ones(N)
+    food_vectors = np.zeros((N,24))
     total_consumption = np.zeros(N)
         
     with tf.Session() as sess:
                 
         F = free_agent(basic_needs,sess,success_probability) 
+        log_loss = F.surprise()
         
         ### it might be a good idea to regularise the squared loss:
-        surprisal = tf.reduce_mean(tf.multiply(tf.constant(-1.0),F.surprise())) 
+        surprisal = -1.0*tf.reduce_mean(log_loss)
         
         ### define the optimiser:
         optimizer = tf.train.AdagradOptimizer(0.01)
@@ -71,8 +63,12 @@ def train(epochs,batch_size,basic_needs,success_probability):
             
             ## check variances:
             if i % 100 == 0:
-                total_consumption[count] = np.sum(F.sess.run([F.strategy],feed_dict=train_feed))
+                evaluation_feed = {F.survival : mini_batch[0].reshape(1,1)}
+                #print(np.shape(F.sess.run([F.strategy],feed_dict=evaluation_feed)[0]))
+                #break
+                food_vectors[count] = F.sess.run([F.strategy],feed_dict=evaluation_feed)[0]
+                total_consumption[count] = np.sum(food_vectors[count])
                 count += 1
             
-    return hunting_priors, total_consumption
+    return log_loss, food_vectors, total_consumption
     

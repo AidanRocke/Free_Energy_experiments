@@ -59,10 +59,11 @@ class free_agent:
         
         #get probability of success:
         success_vector = tf.convert_to_tensor(np.random.choice((0.0,1.0),size=24,p=(1-self.p,self.p)))
-        total = tf.reduce_sum(tf.multiply(tf.cast(success_vector,tf.float32),self.strategy))
+        #total = tf.reduce_sum(tf.multiply(tf.cast(success_vector,tf.float32),self.strategy))
+        total = tf.multiply(tf.cast(success_vector,tf.float32),self.strategy)
         
         ## setup distribution:
-        dist = tf.contrib.distributions.Normal(self.p*self.basic_needs,1.0)
+        dist = tf.contrib.distributions.Normal(self.basic_needs,1.0)
         
         
         return dist.log_prob(total)
