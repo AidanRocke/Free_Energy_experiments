@@ -1,4 +1,4 @@
-### Note: The following repository grew out of [Romain Brette's critical thought experiment the free energy principle](http://romainbrette.fr/what-is-computational-neuroscience-xxix-the-free-energy-principle/). 
+### Note: The following repository grew out of [Romain Brette's critical thought experiment on the free energy principle](http://romainbrette.fr/what-is-computational-neuroscience-xxix-the-free-energy-principle/). 
 ### Note 2: This Github repository is accompanied by [the following blog post](http://paulispace.com/statistics/2018/04/07/causal_path_entropy.html). 
 
 # Motivation:
