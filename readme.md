@@ -8,7 +8,7 @@
 To simulate Romain's problem, I made the following assumptions:
 
 1. We have an organism which has to eat at least k times in the last 24 hours and can eat at most once per hour. 
-2. The homeostatic conditions of our organism are given by a Gaussian distribution centered at $$k$$ with unit variance, a Gaussian food critic if you will. This specifies that our organism should't eat much less than $$k$$ times a day and shouldn't eat a lot more than $$k$$ times a day. In fact, this explains why living organisms tend to 
+2. The homeostatic conditions of our organism are given by a Gaussian distribution centered at k with unit variance, a Gaussian food critic if you will. This specifies that our organism should't eat much less than k times a day and shouldn't eat a lot more than k times a day. In fact, this explains why living organisms tend to 
 have masses that are normally distributed during adulthood. 
 3. A food policy consists of a 24-dimensional vector where the values range from 0.0 to 1.0 and we want to maximise the negative log probability that the total consumption is drawn from the Gaussian food critic. 
 4. Food policies are the output of a generative neural network(setup using TensorFlow) whose inputs are either one or zero to indicate a survival prior, with one indicating a preference for survival. 
